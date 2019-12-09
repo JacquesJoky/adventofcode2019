@@ -29,10 +29,23 @@ let runProgram = (table, noun, verb) => {
     return t;
 } 
 
-let output = (input, noun, verb) => {
-    let table = toTable(input);
+let output = (intcodeProgram, noun, verb) => {
+    let table = toTable(intcodeProgram);
     table = runProgram(table, noun, verb);
     return table[0];
 }
 
 console.log('La solution au puzzle 3 est : ' + output(intcodeProgram, 12, 2));
+
+let input = (intcodeProgram, result) => {
+    for(let noun = 0; noun < 100; noun ++) {
+        for(let verb = 0; verb < 100; verb ++) {
+            if (output(intcodeProgram, noun, verb) === result) {
+                return (100 * noun + verb);
+            }
+        }
+    }
+    return "non existing";
+}
+
+console.log('La solution au puzzle 4 est : ' + input(intcodeProgram, 19690720));
