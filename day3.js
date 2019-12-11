@@ -27,13 +27,36 @@ let addPositions = (path, direction, distance) => {
     return p;
 }
 
-let wirePositions = table => {
-    let wirePath = [[0, 0]];
-    for (let i = 0; i < table.length; i ++) {
-        let direction = table[i].slice(0, 1);
-        let distance = Number(table[i]. slice(1));
+let wirePositions = moves => {
+    let x = 0;
+    let y = 0;
 
-        wirePath = addPositions(wirePath, direction, distance);
+    let wirePath = [];
+    for (let i = 0; i < moves.length; i ++) {
+        let direction = moves[i].slice(0, 1);
+        let distance = Number(moves[i]. slice(1));
+
+        if (direction === 'U') {
+            for (let i = 0; i < distance; i++) {
+                y++;
+                wirePath.push(x + ',' + y);
+            }
+        } else if (direction === 'R') {
+            for (let i = 0; i < distance; i++) {
+                x++;
+                wirePath.push(x + ',' + y);
+            }
+        } else if (direction === 'D') {
+            for (let i = 0; i < distance; i++) {
+                y--;
+                wirePath.push(x + ',' + y);
+            }
+        } else if (direction === 'L') {
+            for (let i = 0; i < distance; i++) {
+                x--;
+                wirePath.push(x + ',' + y);
+            }
+        }
     }
     return wirePath;
 }
@@ -54,17 +77,12 @@ let wirePositionsList = input => {
 let intersectionsList = input => {
     let wires = wirePositionsList(input);
     let wire1 = wires[0];
-    let wire2 = wires[1];
-    let intersections = [];
+    let wire2 = new Set(wires[1]);
+    let intersections = new Set();
 
     for (let i = 1; i < wire1.length; i++) {
-        for (let j = 1; j < wire2.length; j++) {
-            if (wire1[i][0] === 0 && wire1[i][1] === 0) {
-
-            } else if (wire1[i][0] === wire2[j][0]
-                && wire1[i][1] === wire2[j][1]) {
-                intersections.push([wire1[i][0], wire1[i][1]]);
-            }
+        if (wire2.has(wire1[i])) {
+            intersections.add(wire1[i]);
         }
     }
     return intersections;
@@ -73,12 +91,14 @@ let intersectionsList = input => {
 //console.log('La liste des intersections est la suivante : ')
 //console.log(intersectionsList(input));
 
-let manhattanDistance = position => {
-    return Math.abs(position[0]) + Math.abs(position[1]);
+let manhattanDistance = positionString => {
+    let positionArray = positionString.split(',');
+
+    return Math.abs(positionArray[0]) + Math.abs(positionArray[1]);
 }
 
 let manhattanDistances = intersections => {
-    let distances = intersections.map(manhattanDistance);
+    let distances = [...intersections].map(manhattanDistance);
     return distances;
 }
 
@@ -92,5 +112,16 @@ let manhattanDistanceToClosestIntersection = input => {
     return distance;
 }
 
-console.log('La solution du puzzle 6 est :');
+console.log('La solution du puzzle 5 est :');
 console.log(manhattanDistanceToClosestIntersection(input));
+
+let leastStepsRequiredToIntersection = input => {
+    let wires = wirePositionsList(input);
+    let intersections = [...intersectionsList(input)];
+    let steps = intersections.map(position => wires[0].indexOf(position) + 1 + wires[1].indexOf(position) + 1);
+
+    return Math.min(...steps);
+}
+
+console.log('La solution du puzzle 6 est :');
+console.log(leastStepsRequiredToIntersection(input));
