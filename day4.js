@@ -1,4 +1,5 @@
 let input = '147981-691423';
+
 let min = Number(input.split('-')[0]);
 let max = Number(input.split('-')[1]);
 let numberOfDigits = 6;
@@ -9,8 +10,9 @@ let hastheRightNumberOfDigits = number => {
 
 let hasTwoIdenticAdjacentDigits = number => {
     let result = false;
+    let string = number +'';
     for (let i = 0; i < numberOfDigits - 1; i++) {
-        if ((number+'').charAt(i) === (number+'').charAt(i + 1)) {
+        if (string[i] === string[i+ 1]) {
             result = true;
         }
     }
@@ -19,9 +21,11 @@ let hasTwoIdenticAdjacentDigits = number => {
 
 let hasExactlyTwoIdenticAdjacentDigits = number => {
     let result = false;
+    let string = number + '';
     for (let i = 0; i < numberOfDigits - 1; i++) {
-        if (((number+'').charAt(i) === (number+'').charAt(i + 1)) &&
-        ((number+'').charAt(i) !== (number+'').charAt(i + 2))) {
+        if (string[i] === string[i + 1] &&
+            string[i] !== string[i - 1] &&
+            string[i] !== string[i + 2]) {
             result = true;
         }
     }
