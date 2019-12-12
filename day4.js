@@ -17,6 +17,17 @@ let hasTwoIdenticAdjacentDigits = number => {
     return result;
 }
 
+let hasExactlyTwoIdenticAdjacentDigits = number => {
+    let result = false;
+    for (let i = 0; i < numberOfDigits - 1; i++) {
+        if (((number+'').charAt(i) === (number+'').charAt(i + 1)) &&
+        ((number+'').charAt(i) !== (number+'').charAt(i + 2))) {
+            result = true;
+        }
+    }
+    return result;
+}
+
 let hasOnlyIncreasingOrSameDigitsFromLeftToRight = number => {
     let result = true;
     for (let i = 0; i < numberOfDigits - 1; i++) {
@@ -27,14 +38,14 @@ let hasOnlyIncreasingOrSameDigitsFromLeftToRight = number => {
     return result;
 }
 
-let numberOfPossiblePasswords = input => {
+let numberOfPossiblePasswords = (input, adjacentDigitsCondition) => {
     let min = Number(input.split('-')[0]);
     let max = Number(input.split('-')[1]);
     let number = 0;
 
     for (let i = min; i<= max; i++) {
         if (hastheRightNumberOfDigits(i) &&
-        hasTwoIdenticAdjacentDigits(i) &&
+        adjacentDigitsCondition(i) &&
         hasOnlyIncreasingOrSameDigitsFromLeftToRight(i)) {
             number++;    
         }
@@ -44,4 +55,7 @@ let numberOfPossiblePasswords = input => {
 }
 
 console.log('La solution du puzzle 7 est :');
-console.log(numberOfPossiblePasswords(input));
+console.log(numberOfPossiblePasswords(input, hasTwoIdenticAdjacentDigits));
+
+console.log('La solution du puzzle 8 est :');
+console.log(numberOfPossiblePasswords(input, hasExactlyTwoIdenticAdjacentDigits));
